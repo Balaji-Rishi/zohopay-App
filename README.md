@@ -48,6 +48,7 @@ This project is a simple UPI Transaction system that implements the following fe
 4.Run the backend server
 
 5.Navigate to the frontend folder and run: 
+```bash
 
      npm install
       npm start
@@ -114,8 +115,11 @@ Screenshots
 
 
 Author
+
 balaji S
+
 Email:balajikrish268@gmail.com
+
 LinkedIn: https://www.linkedin.com/in/balaji268/
 
 License
