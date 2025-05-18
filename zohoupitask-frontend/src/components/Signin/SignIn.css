@@ -1,0 +1,104 @@
+
+
+/* This will center the signin-container */
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('../Images/bgimg.svg') no-repeat center center;
+  background-size: cover;
+}
+
+/* Your existing styles */
+.signin-container {
+  max-width: 900px;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.signin-form-section {
+  background: #fff;
+}
+
+.logo {
+  height: 40px;
+}
+
+.social-icons img {
+  width: 32px;
+  margin-right: 8px;
+  cursor: pointer;
+  filter: grayscale(0.5);
+  transition: filter 0.3s;
+}
+
+.social-icons img:hover {
+  filter: grayscale(0);
+}
+
+.signin-using p {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.signup-link {
+  margin-top: 15px;
+}
+
+.signup-link a {
+  color: #0066ff;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+.signin-info-section {
+  background: #f5f7fa;
+  text-align: center;
+}
+
+.info-illustration img {
+  max-width: 360px;
+  margin-bottom: 20px;
+}
+
+.learn-more-btn {
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+
+.form-control {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  color: #333;
+  font-size: 16px;
+  padding: 12px 14px;
+  border-radius: 4px;
+  box-shadow: none;
+  transition: border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #bbb;
+  background-color: #fff;
+  outline: none;
+  box-shadow: none;
+}
+
+.form-control::placeholder {
+  color: #aaa;
+}
