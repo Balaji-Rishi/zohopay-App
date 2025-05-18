@@ -41,18 +41,18 @@ This project is a simple UPI Transaction system that implements the following fe
    ```bash
    git clone https://github.com/your-username/upi-transaction-app.git
 
-2.Import the project into your IDE (e.g., IntelliJ, VS Code)
+2. Import the project into your IDE (e.g., IntelliJ, VS Code)
 
-3.Setup your MySQL database and update connection properties in application.properties
+3. Setup your MySQL database and update the connection properties in application.properties
 
-4.Run the backend server
+4. Run the backend server
 
-5.Navigate to the frontend folder and run: 
+5. Navigate to the frontend folder and run: 
      npm install
       npm start
 
       
- 6.Open the UI in your browser at http://localhost:3000
+ 6. Open the UI in your browser at http://localhost:3000
 
 
 Code Explanation
@@ -70,7 +70,7 @@ Code Explanation
 * Frontend uses React.js with Axios to consume backend APIs
 
 Screenshots
-(Add screenshots here if available)
+(Add newscreenshots here if any new functionality is available)
 1. Sign In
 ![image](https://github.com/user-attachments/assets/3d2e001c-3ab3-42a9-b2e3-af52ba4c5ea0)
 
@@ -83,16 +83,16 @@ Screenshots
 4. UPI Management
 ![image](https://github.com/user-attachments/assets/b9d75317-6c39-47b6-a770-448621db1eaf)
 
-5. add phone number and Enable UPI Id.
+5. Add phone number and Enable UPI Id.
 ![image](https://github.com/user-attachments/assets/07a1f121-649a-4a2a-99ad-fc6421c34ee0)
 
 6. Disable UPI id.
 ![image](https://github.com/user-attachments/assets/b4b0a265-2a76-438c-9cce-f61b1297254a)
 
-7. check balance.
+7. Check balance.
 ![image](https://github.com/user-attachments/assets/a08ab7ca-e9ef-48ca-b17f-b054cb286f9c)
 
-8. add money
+8. Add money
 ![image](https://github.com/user-attachments/assets/a698d8ca-1bba-40b6-8460-d3809066478a)
 
 9. Transfer Money
@@ -115,7 +115,7 @@ Screenshots
 
 Author
 
-balaji S
+Balaji S
 
 Email:balajikrish268@gmail.com
 
