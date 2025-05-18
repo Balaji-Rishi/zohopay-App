@@ -33,7 +33,7 @@ public class UpiService {
     private static final Logger logger = LoggerFactory.getLogger(UpiService.class);
 
 
-
+    // Enable UPI for given phone number
     public String enableUpi(String phone) {
         User user = userRepo.findById(phone).orElse(new User(phone, true, 0.0, 0, 0.0));
         user.setUpiEnabled(true);
@@ -43,6 +43,7 @@ public class UpiService {
         return "UPI successfully enabled for your number";
     }
 
+ // Disable UPI for given phone number
     public String disableUpi(String phone) {
 //    	logger.info("Disabling UPI for phone: {}", phone);
     	User user = userRepo.findById(phone).orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -53,24 +54,26 @@ public class UpiService {
         return "UPI successfully disabled for your number";
     }
 
+    // Check balance of given phone number
     public double checkBalance(String phone) {
         return userRepo.findById(phone).orElseThrow(() -> new UserNotFoundException("User not found")).getBalance();
     }
 
+ // Add money to user's account with max balance check
     public String addMoney(String phone, double amount) {    
         User user = userRepo.findById(phone).orElseThrow(() -> new UserNotFoundException("User not found"));
         
         if (user.getBalance() + amount > 100000) {
-            // ✅ Updated part: throw custom exception instead of RuntimeException
             throw new MaxBalanceExceededException("Cannot add money. Account balance cannot exceed ₹100,000. Please check your current balance before trying to add more funds");
         }
 
         user.setBalance(user.getBalance() + amount);
         userRepo.save(user);
-        return "Money added";
+        return "Amount ₹" + amount + " has been successfully added to your account " + phone;
     }
 
 
+    // Transfer money between users with validation and daily limits
     public String transfer(String from, String to, double amount) {        
         User sender = userRepo.findById(from).orElseThrow(() -> new UserNotFoundException("Sender not found with phone: " + from));
 
@@ -126,7 +129,7 @@ public class UpiService {
         
         
     }
-    
+    // Retrieve transactions involving the given phone number
     public List<Transaction> getTransactions(String phone) {
         return txnRepo.findBySenderOrReceiverOrderByTimestampDesc(phone, phone);
     }

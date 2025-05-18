@@ -13,10 +13,12 @@ public class JwtUtil {
     private final String SECRET_KEY = "zoho_upi_123456789012345678901234567890"; // 32+ chars
     private final long EXPIRATION_TIME = 86400000; // 1 day in milliseconds
 
+    // Generate signing key from secret
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
+    // Generate JWT token for username
     public String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -26,6 +28,7 @@ public class JwtUtil {
                 .compact();
     }
 
+    // Extract username from JWT token
     public String extractUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -35,6 +38,7 @@ public class JwtUtil {
                 .getSubject();
     }
 
+ // Validate JWT token (checks signature and expiration
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token);

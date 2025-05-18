@@ -22,6 +22,7 @@ const Signin = () => {
 
   const navigate = useNavigate();
 
+  // On component mount, pre-fill form if "Remember Me" was used before
   useEffect(() => {
     // Pre-fill from localStorage if rememberMe was checked before
     const savedEmail = localStorage.getItem('rememberEmail');
@@ -36,6 +37,7 @@ const Signin = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Basic validation before submitting the form
   const validateForm = () => {
     if (!formData.email.trim() || !formData.password.trim()) {
       setMessage('Email and password are required.');
@@ -104,6 +106,7 @@ const Signin = () => {
             {message && <Alert variant="danger">{message}</Alert>}
 
             <Form onSubmit={handleSubmit}>
+              {/* Email input */}
               <Form.Group controlId="formEmail" className="mb-4">
                 <Form.Control
                   type="email"
@@ -115,6 +118,7 @@ const Signin = () => {
                 />
               </Form.Group>
 
+               {/* Password input with show/hide toggle */}
               <Form.Group controlId="formPassword" className="mb-4">
                 <InputGroup>
                   <Form.Control
@@ -125,6 +129,7 @@ const Signin = () => {
                     onChange={handleChange}
                     required
                   />
+
                   <Button
                     variant="outline-secondary"
                     onClick={() => setShowPassword(!showPassword)}

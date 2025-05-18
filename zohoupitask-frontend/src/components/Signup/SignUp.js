@@ -22,6 +22,7 @@ const Signup = () => {
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+   // Function to validate form input fields
   const validate = () => {
     const newErrors = {};
     if (!formData.username.trim()) newErrors.username = 'Username is required';
@@ -32,6 +33,7 @@ const Signup = () => {
     return newErrors;
   };
 
+  // Handle input changes and clear error/message for the specific field
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -44,6 +46,7 @@ const Signup = () => {
     setMessage('');
   };
 
+  // Handle form submission on clicking the Signup button
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
@@ -82,7 +85,9 @@ const Signup = () => {
             {message}
           </Alert>
         )}
+        {/* Signup form */}
         <Form onSubmit={handleSubmit} noValidate>
+           {/* Username input field */}
           <Form.Group className="mb-3">
             <Form.Control
               type="text"
@@ -95,7 +100,7 @@ const Signup = () => {
             />
             <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
           </Form.Group>
-
+          {/* Email input field */}
           <Form.Group className="mb-3">
             <Form.Control
               type="email"
@@ -109,6 +114,7 @@ const Signup = () => {
             <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
           </Form.Group>
 
+          {/* Password input field */}
           <Form.Group className="mb-4">
             <InputGroup>
               <Form.Control
@@ -130,7 +136,7 @@ const Signup = () => {
               <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-
+          {/* /* Signup button - triggers handleSubmit on click */}
           <Button type="submit" className="w-100 signup-button">
             Sign up
           </Button>

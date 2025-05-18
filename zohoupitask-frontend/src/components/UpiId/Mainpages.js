@@ -8,6 +8,8 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import { Card, Badge } from 'react-bootstrap';
+
 
 
 function MainPages() {
@@ -19,6 +21,8 @@ function MainPages() {
   const [isLoading, setIsLoading] = useState(false);
   const [upiStatus, setUpiStatus] = useState(null);
   const [transactions, setTransactions] = useState([]);
+  const [senderPhone, setSenderPhone] = useState('');
+
 
   const baseUrl = 'http://localhost:8080/upi';
   const API_ENDPOINTS = {
@@ -32,32 +36,37 @@ function MainPages() {
 
 
   useEffect(() => {
-  if (phone.length === 10) {
-    localStorage.setItem('lastUsedPhone', phone);
-    fetchTransactionHistory();
-  } else {
-    setUpiStatus(null); // Reset UPI status when phone becomes invalid
-  }
-}, [phone]);
+    if (phone.length === 10) {
+      localStorage.setItem('lastUsedPhone', phone);
+      fetchTransactionHistory();
+    } else {
+      setUpiStatus(null); // Reset UPI status when phone becomes invalid
+    }
+  }, [phone]);
 
 
   const fetchTransactionHistory = async () => {
     try {
-      const res = await axios.get(`${baseUrl}${API_ENDPOINTS.HISTORY}/${phone}`);
+      const token = localStorage.getItem('token');  // get token from storage
+      const res = await axios.get(`${baseUrl}${API_ENDPOINTS.HISTORY}/${phone}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // add token here
+        },
+      });
       setTransactions(res.data || []);
     } catch (error) {
-      console.error('Error fetching transaction history');
+      console.error('Error fetching transaction history', error);
+      toast.error('Failed to fetch transaction history');
     }
   };
 
+
   const handleApiCall = async (endpoint, method = 'post', params = {}) => {
-    // Show toast if phone is invalid
     if (!phone || phone.length !== 10) {
       toast.error('Enter a valid 10-digit phone number');
       return;
     }
 
-    // Validate amount if applicable
     if (params.amount !== undefined) {
       const amount = Number(params.amount);
       if (!amount || amount <= 0) {
@@ -66,23 +75,32 @@ function MainPages() {
       }
     }
 
-    // Transfer phone validation
     if (endpoint.includes(API_ENDPOINTS.TRANSFER)) {
       if (!toPhone || toPhone.length !== 10) {
         toast.error('Enter a valid 10-digit receiver phone number');
         return;
       }
-
       if (params.amount > 20000) {
-    toast.error('Transfer failed: Maximum allowed per transaction is ₹20,000.');
-    return;
-  }
+        toast.error('Transfer failed: Maximum allowed per transaction is ₹20,000.');
+        return;
+      }
     }
 
     setIsLoading(true);
 
     try {
-      const response = await axios({ method, url: `${baseUrl}${endpoint}`, params });
+      // Get token from localStorage or any other place you store it
+      const token = localStorage.getItem('token');
+
+      const response = await axios({
+        method,
+        url: `${baseUrl}${endpoint}`,
+        params,
+        headers: {
+          Authorization: `Bearer ${token}`,  // <-- Add this header
+          'Content-Type': 'application/json',
+        },
+      });
 
       let messageToShow = '';
       if (endpoint.includes('balance')) {
@@ -105,29 +123,29 @@ function MainPages() {
         setToPhone('');
       }
 
-    } 
-    // catch (error) {
-    //   const errMsg = error.response?.data?.message || 'Something went wrong';
-    //   setMessage(errMsg);
-    //   toast.error(errMsg);
-    // } 
+    } catch (error) {
+      const errMsg =
+        error.response?.data?.message ||
+        (typeof error.response?.data === 'string' ? error.response.data : null) ||
+        'Something went wrong';
 
-    catch (error) {
-  const errMsg =
-    error.response?.data?.message ||
-    (typeof error.response?.data === 'string' ? error.response.data : null) ||
-    'Something went wrong';
-
-  setMessage(errMsg);
-  toast.error(errMsg);
-}
-    
-    finally {
+      setMessage(errMsg);
+      toast.error(errMsg);
+    } finally {
       setIsLoading(false);
     }
   };
 
-  
+
+  useEffect(() => {
+    const savedPhone = localStorage.getItem('senderPhone');
+    if (savedPhone) {
+      setSenderPhone(savedPhone);
+    }
+  }, []);
+
+
+
 
   const handleInputChange = (e, setter) => {
     setter(e.target.value.replace(/[^0-9]/g, ''));
@@ -163,8 +181,8 @@ function MainPages() {
 
             <div className="d-flex justify-content-between align-items-center mt-2">
               <span className={`badge ${upiStatus === 'enabled' ? 'bg-success' : 'bg-secondary'}`}>
-  UPI: {phone.length === 10 ? (upiStatus || 'unknown') : 'unknown'}
-</span>
+                UPI: {phone.length === 10 ? (upiStatus || 'unknown') : 'unknown'}
+              </span>
             </div>
 
             <div className="mt-3 d-flex gap-2 flex-wrap">
@@ -191,6 +209,34 @@ function MainPages() {
             }}
           >
             <h5>🪙  Add Money</h5>
+
+            {/* New phone number and UPI status display */}
+            <Card className="mb-4 shadow-sm p-3">
+              <div className="d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center gap-2">
+                  <PhoneAndroidIcon color="action" />
+                  <strong>Your Phone Number:</strong> <span>{phone}</span>
+
+                </div>
+
+                <div>
+                  <strong>UPI Status:</strong>{' '}
+                  <Badge
+                    bg={
+                      upiStatus === 'enabled'
+                        ? 'success'
+                        : upiStatus === 'disabled'
+                          ? 'danger'
+                          : 'secondary'
+                    }
+                    className="text-uppercase"
+                  >
+                    {upiStatus || 'Unknown'}
+                  </Badge>
+                </div>
+              </div>
+            </Card>
+
 
             <TextField
               label="Amount"
@@ -234,8 +280,28 @@ function MainPages() {
           >
             <h5>🔁 Transfer Money</h5>
 
+            {/* Sender Phone Number Input */}
             <TextField
-              label="Receiver Phone Number"
+              label="Sender Phone Number"
+              variant="outlined"
+              fullWidth
+              value={phone} // ✅ directly use the already-loaded phone
+              disabled
+              inputProps={{ maxLength: 10 }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhoneAndroidIcon />
+                  </InputAdornment>
+                ),
+              }}
+              margin="normal"
+            />
+
+
+            {/* Beneficiary Phone Number Input */}
+            <TextField
+              label="Beneficiary Phone Number"
               variant="outlined"
               fullWidth
               value={toPhone}

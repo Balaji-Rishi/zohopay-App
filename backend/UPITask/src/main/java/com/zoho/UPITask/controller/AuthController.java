@@ -18,6 +18,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    // Signup endpoint to register new users
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody AppUser user) {
         if (userService.userExists(user.getEmail())) {
@@ -27,6 +28,7 @@ public class AuthController {
         return ResponseEntity.ok("User registered successfully: " + saved.getEmail());
     }
 
+    // Signin endpoint to authenticate users and generate JWT token
     @PostMapping("/signin")
     public ResponseEntity<?> signin(@RequestBody AppUser loginRequest) {
         AppUser user = userService.loginUser(loginRequest.getEmail(), loginRequest.getPassword());
