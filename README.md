@@ -49,9 +49,10 @@ This project is a simple UPI Transaction system that implements the following fe
 
 5.Navigate to the frontend folder and run: 
 ```bash
-
      npm install
       npm start
+```bash
+
       
  6.Open the UI in your browser at http://localhost:3000
 
